@@ -20,5 +20,5 @@
 5. Type: node server.js
 6. Click enter
 
-## Instructions for opening the web app in the browser
+## Instructions for opening the web app in the browser\:(After starting the frontend and backend server)
 1. In the web browser type: localhost\:5500
