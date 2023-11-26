@@ -2,6 +2,7 @@
 
 ## Overall instructions
 1. Node.js must be installed first.
+2. Node.js link\:https://nodejs.org/dist/v20.10.0/node-v20.10.0-x64.msi 
 
 ## Instructions for starting the backend server
 1. Open TaalProject folder.
@@ -19,5 +20,5 @@
 5. Type: node server.js
 6. Click enter
 
-## Instructions for opening the web app in the browser
+## Instructions for opening the web app in the browser\:(After starting the frontend and backend server)
 1. In the web browser type: localhost\:5500
