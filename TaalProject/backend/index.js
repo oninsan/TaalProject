@@ -7,10 +7,10 @@ const { getDoc, doc } = require("firebase/firestore");
 const app = express();
 app.use(express.json());
 app.use(cors());
-app.use(express.static(path.join(__dirname, '../frontend')));
+app.use(express.static(path.join(__dirname, '../frontend/build')));
 
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname+'../frontend/index.html'));
+  res.sendFile(path.join(__dirname+'../frontend/build/index.html'));
 });
 
 const PORT = 5000;
