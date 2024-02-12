@@ -1,0 +1,376 @@
+index.html
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Taal Lake Water Quality Monitoring System Dashboard</title>
+     <link rel="icon" type="image/png" href="logo.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.4/css/jquery.dataTables.css">
+    <style>
+      body {
+        min-width: 310px;
+        max-width: 800px;
+        height: 400px;
+        margin: 0 auto;
+      }
+      h2 {
+        font-family: Arial;
+        font-size: 2.5rem;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Taal Lake IoT- based Water Quality Monitoring</h2>
+    <div class="chart-wrapper">
+      <div class="ph" style="display: flex;flex-direction: row;align-items: center;">
+        <div id="chart-ph-level" class="container" style="margin-top: 50px"></div>
+        <div class="ph-panel" style="border: 2px solid black;padding: 1rem;">
+          <h3>Sample Definition</h3>
+        </div>
+      </div>
+       
+      <div class="temp" style="display: flex;flex-direction: row;align-items: center;">
+       <div id="chart-temperature" class="container" style="margin-top: 50px"></div>
+        <div class="temp-panel" style="border: 2px solid black;padding: 1rem;">
+          <h3>Sample Definition</h3>
+        </div>
+      </div>
+
+      <div class="turb" style="display: flex;flex-direction: row;align-items: center;">
+        <div id="chart-turbidity" class="container" style="margin-top: 50px"></div>
+        <div class="turb-panel" style="border: 2px solid black;padding: 1rem;">
+          <h3>Sample Definition</h3>
+        </div>
+      </div>
+
+      <div class="reports" id="reports" style="margin-top: 5rem;">
+        <div style="display: flex; flex-direction: row; align-items: center;">
+          <h1>Printed Report</h1>
+          <button class="print-report" style="min-width: 10%; height: 2rem; margin-left: 2rem;">Print</button>
+        </div>
+        <div class="form">
+          <label for="starting-date">Starting date:</label>
+          <input id="starting-date" type="date" class="starting-date" style="margin-right: 5rem;">
+          <label for="ending-date"> Ending date:</label>
+          <input id="ending-date" type="date" class="ending-date">
+          <button class="ok">Ok</button>
+        </div>
+
+        <div class="table">
+          <table id="myTable">
+            <thead>
+              <tr>
+                <th>Date and Time</th>
+                <th>Sensor</th>
+                <th>Readings</th>
+                <th>Label</th>
+              </tr>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>
+        </div>
+      </div>
+  </div>
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.4/js/jquery.dataTables.js"></script>
+</body>
+  <script>
+    // check if logged in
+    if(sessionStorage.getItem("logged") === undefined || sessionStorage.getItem("logged") === null){
+      location.href = "/"
+    }
+    let table = $('#myTable').DataTable({
+      columns: [
+        { data: "Date and Time" },
+        { data: "Sensor" },
+        { data: "Readings" },
+        { data: "Label" }
+      ]
+    });
+
+    //PH LEVEL
+    var chartPhLevel = new Highcharts.Chart({
+      chart: { renderTo: "chart-ph-level" },
+      title: { text: "Ph Level" },
+      series: [
+        {
+          showInLegend: false,
+          name: "Ph Level",
+          data: [],
+        },
+      ],
+      plotOptions: {
+        line: { animation: false, dataLabels: { enabled: true } },
+        series: { color: "#18009c" },
+      },
+      xAxis: { type: "datetime", dateTimeLabelFormats: { second: "%H:%M:%S" } },
+      yAxis: {
+        title: { text: "Ph level" },
+        min: 0, // Set the minimum value for the y-axis
+        max: 14, // Set the maximum value for the y-axis
+        tickInterval: 0.5, // Define the interval between ticks (in this case, 1)
+        //title: { text: 'Temperature (Fahrenheit)' }
+      },
+      credits: { enabled: false },
+    });
+    setInterval(function () {
+      $.ajax({
+        url: "http://localhost:5000/api/taal/getreadings/ph",
+        type: "GET",
+        success: function (response) {
+          const x = new Date(response.DateTime).getTime()
+          
+          const readings = parseFloat(response.Reading)
+          console.log(readings)
+          // console.log(x)
+          let label
+          var panel = $(".ph-panel>h3");
+
+          if (readings <= 0) {
+            label = "Very Acidic";
+          } else if (readings < 2.9) {
+            label = "Strongly Acidic";
+          } else if (readings < 5) {
+            label = "Moderately Acidic";
+          } else if (readings === 6) {
+            label = "Slightly Acidic";
+          } else if (readings === 7 && readings<=12) {
+            label = "Neutral";
+          } else if (readings >= 13) {
+            label = "Slightly Alkaline";
+          } else if (readings >= 14) {
+            label = "Very Alkaline";
+          }
+          panel.text(label)
+
+          if (chartPhLevel.series[0].data.length > 40) {
+            chartPhLevel.series[0].addPoint([x, readings], true, true, true);
+          } else {
+            chartPhLevel.series[0].addPoint([x, readings], true, false, true);
+          }
+
+          $.ajax({
+            method:"POST",
+            url:"http://localhost:5000/api/taal/create",
+            data:JSON.stringify({
+              "DateTime":new Date(response.DateTime),
+              "Reading":readings,
+              "Label":label,
+              "Sensor":"PH"
+            }),
+            contentType: "application/json",
+            success:res=>{
+              console.log(res.msg)
+            },
+            error:err=>{
+              console.log(err.msg)
+            }
+          })
+        },
+        error: function (error) {
+          console.log(error);
+        },
+      });
+    }, 30000);
+
+
+    //TEMPERATURE VALUE
+    var chartTemperature = new Highcharts.Chart({
+      chart: { renderTo: "chart-temperature" },
+      title: { text: "Temperature" },
+      series: [
+        {
+          showInLegend: false,
+          name: "Temperature( ° C)",
+          data: [],
+        },
+      ],
+      plotOptions: {
+        line: { animation: false, dataLabels: { enabled: true } },
+        series: { color: "#18009c" },
+      },
+      xAxis: { type: "datetime", dateTimeLabelFormats: { second: "%H:%M:%S" } },
+      yAxis: {
+        title: { text: "Temperature:" },
+      },
+      credits: { enabled: false },
+    });
+    setInterval(function () {
+      $.ajax({
+        url: "http://localhost:5000/api/taal/getreadings/temperature",
+        type: "GET",
+        success: function (response) {
+          const x = new Date(response.DateTime).getTime()
+          
+          const readings = parseFloat(response.Reading)
+          console.log(readings)
+
+          let label
+          const panel = $(".temp-panel>h3")
+          if(readings<=-273.15){
+            label = "Absolute zero"
+          }else if(readings<=0){
+            label = "Freezing point of water"
+          }else if(readings>=20 && readings<=36){
+            label = "Room temperature"
+          }else if(readings >=36.01 && readings<=37){
+            label = "Body temperature"
+          }else if(readings === 100){
+            label = "Boiling point of water"
+          }else if(readings>100 && readings>=374){
+            label = "Gaseous state"
+          }
+          panel.text(label)
+          
+          if (chartTemperature.series[0].data.length > 40) {
+            chartTemperature.series[0].addPoint([x, readings], true, true, true);
+          } else {
+            chartTemperature.series[0].addPoint([x, readings], true, false, true);
+          }
+
+          $.ajax({
+            method:"POST",
+            url:"http://localhost:5000/api/taal/create",
+            data:JSON.stringify({
+              "DateTime":new Date(response.DateTime),
+              "Reading":readings,
+              "Label":label,
+              "Sensor":"Temperature"
+            }),
+            contentType: "application/json",
+            success:res=>{
+              console.log(res.msg)
+            },
+            error:err=>{
+              console.log(err.msg)
+            }
+          })
+        },
+        error: function (error) {
+          console.log(error);
+        },
+      });
+    }, 30000);
+
+
+    //Turbidity VALUE
+    var chartTurbidity = new Highcharts.Chart({
+      chart: { renderTo: "chart-turbidity" },
+      title: { text: "Turbidity" },
+      series: [
+        {
+          showInLegend: false,
+          name: "Turbidity(NTU)",
+          data: [],
+        },
+      ],
+      plotOptions: {
+        line: { animation: false, dataLabels: { enabled: true } },
+        series: { color: "#18009c" },
+      },
+      xAxis: { type: "datetime", dateTimeLabelFormats: { second: "%H:%M:%S" } },
+      yAxis: {
+        title: { text: "Turbidity:" },
+      },
+      credits: { enabled: false },
+    });
+    setInterval(function () {
+      $.ajax({
+        url: "http://localhost:5000/api/taal/getreadings/turbidity",
+        type: "GET",
+        success: function (response) {
+          const x = new Date(response.DateTime).getTime()
+          
+          const readings = parseFloat(response.Reading)
+          console.log(readings)
+          
+          let label
+          const panel = $(".turb-panel>h3")
+          if(readings ==0 || readings <=1 ){
+            label = "Clear"
+          }else if(readings <= 5){
+            label = "Slightly Cloudy"
+          }else if(readings <= 10){
+            label = "Cloudy"
+          }else if(readings<=50){
+            label = "Very Cloudy"
+          }else if(readings>50){
+            label = "Extremely Cloudy"
+          }
+          panel.text(label)
+          if (chartTurbidity.series[0].data.length > 40) {
+            chartTurbidity.series[0].addPoint([x, readings], true, true, true);
+          } else {
+            chartTurbidity.series[0].addPoint([x, readings], true, false, true);
+          }
+
+          $.ajax({
+            method:"POST",
+            url:"http://localhost:5000/api/taal/create",
+            data:JSON.stringify({
+              "DateTime":new Date(response.DateTime),
+              "Reading":readings,
+              "Label":label,
+              "Sensor":"Turbidity"
+            }),
+            contentType: "application/json",
+            success:res=>{
+              console.log(res.msg)
+            },
+            error:err=>{
+              console.log(err.msg)
+            }
+          })
+        },
+        error: function (error) {
+          console.log(error);
+        },
+      });
+    }, 30000);
+
+    // filter the dates for the sensor readings
+    $(".ok").click(e=>{
+      e.preventDefault()
+      console.log("Clicked")
+      $.ajax({
+        url:"http://localhost:5000/api/taal/readings",
+        method:"POST",
+        data:JSON.stringify({
+          "startDate":new Date($("#starting-date").val()),
+          "endDate":new Date($("#ending-date").val())
+        }),
+        contentType:"application/json",
+        success:res=>{
+          res.data.forEach(item=>{
+            table.row.add({
+              "Date and Time":item.DateTime,
+              "Sensor":item.Sensor,
+              "Readings":item.Reading,
+              "Label":item.Label
+            })
+          })
+          table.draw()
+        },
+        error:err=>{
+          console.log(err.msg)
+        }
+      })
+    })
+
+    // print the results
+    $(".print-report").click(e=>{
+      e.preventDefault()
+      const divToPrint = $("#reports").html();
+      const newWindow = window.open('', '_blank', 'width=800,height=600');
+      newWindow.document.write('<html><head><title>Print</title></head><body>');
+      newWindow.document.write(divToPrint);
+      newWindow.document.write('</body></html>');
+      newWindow.document.close();
+      newWindow.print();
+    })
+  </script>
+</html>

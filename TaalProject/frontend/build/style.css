@@ -1,0 +1,287 @@
+
+/* style.css */
+/* Import the 'Quicksand' font family from Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
+
+/* Reset styles for margin, padding, box-sizing, and font-family */
+* {
+    margin: 0; /* Resets margin to zero */
+    padding: 0; /* Resets padding to zero */
+    box-sizing: border-box; /* Ensures box-sizing includes padding and border */
+    font-family: 'Quicksand', sans-serif; /* Sets the default font family to Quicksand */
+}
+
+/* Styles for the body element */
+body {
+    display: flex; /* Makes the body a flex container */
+    justify-content: center; /* Horizontally centers content within the body */
+    align-items: center; /* Vertically centers content within the body */
+    min-height: 100vh; /* Sets a minimum height of 100% of the viewport height */
+    background: #fff; /* Sets the background color to black */
+}
+body {
+    background-image: url('bg.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+/* Gradient Button */
+.signin .content .form .inputBox input[type="submit"] {
+    /* Add gradient background */
+    background: linear-gradient(to right, #4666FF, #4B0082);
+    /* Update text color to white */
+    color: #fff;
+    /* Add box shadow for depth */
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    /* Add transition for hover effect */
+    transition: 0.3s ease-in-out;
+}
+
+/* Hover effect for button */
+.signin .content .form .inputBox input[type="submit"]:hover {
+    background: linear-gradient(to right, #4B0082, #4666FF);
+    color: #fff;
+}
+
+/* Header Styles */
+.header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Footer Styles */
+.footer {
+    text-align: center;
+    margin-top: 20px;
+}
+
+/* Logo Styles */
+.logo {
+    max-width: 100px; /* Adjust the size as needed */
+}
+/* Styles for the main section */
+section {
+    position: absolute; /* Positions the section absolutely */
+    width: 100vw; /* Sets the width to 100% of the viewport width */
+    height: 100vh; /* Sets the height to 100% of the viewport height */
+    display: flex; /* Makes the section a flex container */
+    justify-content: center; /* Horizontally centers content within the section */
+    align-items: center; /* Vertically centers content within the section */
+    gap: 2px; /* Sets the gap between child elements within the section */
+    flex-wrap: wrap; /* Allows child elements to wrap to the next line if necessary */
+    overflow: hidden; /* Hides any overflowing content within the section */
+}
+
+/* Styles for the animated background pseudo-element */
+section::before {
+    content: ''; /* Creates a pseudo-element before the content of the section */
+    position: absolute; /* Positions the pseudo-element absolutely */
+    width: 100%; /* Sets the width to 100% of its containing element (section) */
+    height: 100%; /* Sets the height to 100% of its containing element (section) */
+   }
+/* Add a border with an RGB gradient from red to green to blue to the .signin div */
+.signin {
+    padding: 20px; /* Add padding to give space between the content and the border */
+    border: 4px solid #4666FF; /* Set a transparent border */
+    }
+  
+
+/* Keyframes for the background animation */
+@keyframes animate {
+    0% {
+        transform: translateY(-100%); /* Initial state of animation: translates the background up by 100% of its height */
+    }
+    100% {
+        transform: translateY(100%); /* Final state of animation: translates the background down by 100% of its height */
+    }
+}
+
+/* Styles for the span elements */
+section span {
+    position: relative; /* Makes the span elements relatively positioned within their containing section */
+    display: block; /* Makes the span elements block-level elements */
+    width: calc(15vw - 2px); /* Sets the width to 5% of the viewport width minus 2 pixels */
+    height: calc(5vw - 2px); /* Sets the height to 5% of the viewport width minus 2 pixels */
+    background: #dcdada; /* Sets the background color to a dark gray */
+    z-index: 2; /* Sets the stacking order (higher values stack above lower values) */
+    transition: 1.5s; /* Adds a 1.5-second transition effect */
+}
+
+/* Styles for the span elements on hover */
+section span:hover {
+    background: rgba(76, 0, 255, 0.041); /* Changes the background color to a slightly transparent purple on hover */
+    transition: 0s; /* Removes the transition effect on hover for an immediate color change */
+}
+
+/* Styles for the sign-in container */
+section .signin {
+    position: absolute; /* Positions the sign-in container absolutely */
+    width: 400px; /* Sets the width of the sign-in container */
+    background: rgb(203, 223, 248); /* Sets the background color to dark gray */
+    z-index: 1000; /* Sets the stacking order (higher values stack above lower values) */
+    display: flex; /* Makes the container a flex container */
+    justify-content: center; /* Horizontally centers content within the container */
+    align-items: center; /* Vertically centers content within the container */
+    padding: 40px; /* Adds padding to the container */
+    border-radius: 4px; /* Adds rounded corners */
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 9); /* Applies a box shadow for a raised effect */
+}
+
+/* Styles for the sign-in content */
+section .signin .content {
+    position: relative; /* Makes the content relatively positioned within its container */
+    width: 100%; /* Sets the width to 100% of its container */
+    display: flex; /* Makes the content a flex container */
+    justify-content: center; /* Horizontally centers content within the content container */
+    align-items: center; /* Vertically centers content within the content container */
+    flex-direction: column; /* Arranges content in a column layout */
+    gap: 40px; /* Sets the gap between child elements */
+}
+
+/* Styles for the sign-in title */
+section .signin .content h2 {
+    font-size: 2em; /* Sets the font size to 2em */
+    color: #4666FF; /* Sets the text color to blue */
+    text-transform: uppercase; /* Transforms text to uppercase */
+}
+
+/* Styles for the sign-in form */
+section .signin .content .form {
+    width: 100%; /* Sets the width of the form to 100% of its container */
+    display: flex; /* Makes the form a flex container */
+    flex-direction: column; /* Arranges form elements in a column layout */
+    gap: 25px; /* Sets the gap between form elements */
+}
+
+/* Styles for the input box container */
+section .signin .content .form .inputBox {
+    position: relative; /* Makes the input box container relatively positioned within its form */
+    width: 100%; /* Sets the width of the input box container to 100% */
+}
+
+/* Styles for the input elements */
+section .signin .content .form .inputBox input {
+    position: relative; /* Makes the input elements relatively positioned within their container */
+    width: 100%; /* Sets the width of the input elements to 100% */
+    background: #fff; /* Sets the background color to dark gray */
+    border: none; /* Removes borders */
+    outline: none; /* Removes outlines */
+    padding: 25px 10px 7.5px; /* Adds padding to the input elements */
+    border-radius: 4px; /* Adds rounded corners */
+    /* color: #fff; Sets the text color to white */
+    font-weight: 500; /* Sets font weight to 500 */
+    font-size: 1em; /* Sets the font size to 1em */
+}
+
+/* Styles for the input icons */
+section .signin .content .form .inputBox i {
+    position: absolute; /* Makes the input icons absolutely positioned within their input box */
+    left: 0; /* Positions icons to the left of input */
+    padding: 15px 10px; /* Adds padding to the icons */
+    font-style: normal; /* Sets the font style to normal */
+    color: #aaa; /* Sets the icon color to light gray */
+    transition: 0.5s; /* Adds a 0.5-second transition effect */
+    pointer-events: none; /* Disables pointer events on the icons */
+}
+
+/* Styles for input icons on focus and when input is valid */
+.signin .content .form .inputBox input:focus ~ i,
+.signin .content .form .inputBox input:valid ~ i {
+    transform: translateY(-7.5px); /* Translates the icons up by 7.5 pixels */
+    font-size: 0.8em; /* Reduces the icon font size to 0.8em */
+    color: #4666FF; /* Sets the icon color to white */
+}
+
+/* Styles for the links container */
+.signin .content .form .links {
+    position: relative; /* Makes the links container relatively positioned within the form */
+    width: 100%; /* Sets the width of the links container to 100% */
+    display: flex; /* Makes the links container a flex container */
+    justify-content: space-between; /* Spreads the links evenly horizontally */
+}
+
+/* Styles for the links */
+.signin .content .form .links p {
+    color: #000; /* Sets the text color of the links to white */
+    text-decoration: none; /* Removes underlines from links */
+}
+
+/* Styles for the second link */
+.signin .content .form .links a:nth-child(2) {
+    color: #4666FF; /* Sets the text color of the second link to blue */
+    font-weight: 600; /* Sets the font weight to 600 (bold) */
+}
+
+/* Styles for the submit button */
+.signin .content .form .inputBox input[type="submit"] {
+    padding: 10px; /* Adds padding to the submit button */
+    background: #4666FF; /* Sets the background color of the submit button to blue */
+    color: #000; /* Sets the text color of the submit button to black */
+    font-weight: 600; /* Sets the font weight of the submit button to 600 (bold) */
+    font-size: 1.35em; /* Sets the font size to 1.35em */
+    letter-spacing: 0.05em; /* Adds letter spacing */
+    cursor: pointer; /* Changes the cursor to a pointer on hover */
+}
+
+/* Styles for the submit button when active (clicked) */
+input[type="submit"]:active {
+    opacity: 0.6; /* Reduces the opacity of the submit button when active (clicked) */
+}
+
+/* Media query for screens with a maximum width of 900px */
+@media (max-width: 900px) {
+    section span {
+        width: calc(10vw - 2px); /* Sets the width of the span elements to 10% of the viewport width minus 2 pixels */
+        height: calc(10vw - 2px); /* Sets the height of the span elements to 10% of the viewport width minus 2 pixels */
+    }
+}
+
+/* Media query for screens with a maximum width of 600px */
+@media (max-width: 700px) {
+    section span {
+        width: calc(20vw - 2px); /* Sets the width of the span elements to 20% of the viewport width minus 2 pixels */
+        height: calc(20vw - 2px); /* Sets the height of the span elements to 20% of the viewport width minus 2 pixels */
+    }
+}
+/* Media Queries */
+@media (max-width: 900px) {
+    .inputBox input {
+        padding: 12px;
+    }
+}
+
+@media (max-width: 600px) {
+    .inputBox input {
+        padding: 10px;
+    }
+}
+/* ... (previous CSS code) */
+
+/* Styles for the dashboard container */
+.dashboard {
+    position: absolute;
+    max-width: 50%; /* Set the width to make it wider */
+    max-height: 80%;
+    margin: 0 auto;
+    top: 50%;
+    transform: translateY(-50%);
+    background:  rgb(203, 223, 248);
+    border-radius: 20px;
+    border: 4px solid #4666FF;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3); /* Apply box shadow for a shadowed box effect */
+}
+
+/* Styles for the dashboard content */
+.dashboard .content {
+    padding: 20px;
+}
+
+/* Styles for the dashboard-box container */
+.dashboard-box {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2); /* Apply box shadow for a shadowed box effect */
+}
+
+/* ... (remaining CSS code) */
