@@ -1,11 +1,17 @@
 const express = require("express");
 const cors = require("cors");
+const path = require('path');
 
 const {TaalReadings, TaalAccounts, db, addDoc, getDocs, query, orderBy, limit, where,startAt, endAt} = require("./config.js");
 const { getDoc, doc } = require("firebase/firestore");
 const app = express();
 app.use(express.json());
 app.use(cors());
+app.use(express.static(path.join(__dirname, '../frontend')));
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname+'../frontend/index.html'));
+});
 
 const PORT = 5000;
 
@@ -74,30 +80,6 @@ app.post("/api/taal/createaccount", async (req, res) => {
     res.status(500).send({ msg: "An error occurred", error: error.message });
   }
 })
-
-
-
-// app.post("/api/taal/create", async(req, res)=>{
-//     try {
-//         const data = req.body;
-//         console.log(data);
-
-//         // Get the last index used
-//         const lastDocSnapshot = await getDocs(query(TaalReadings, orderBy('Index', 'desc'), limit(1)));
-//         const lastIndex = lastDocSnapshot.docs[0].data().Index;
-
-//         // Add the index to the data
-//         data.Index = lastIndex + 1;
-
-//         // Add the document
-//         await addDoc(TaalReadings, data);
-
-//         res.send({msg:"Added Taal readings"});
-//     } catch (error) {
-//         console.error(error);
-//         res.status(500).send({msg: "An error occurred"});
-//     }
-// });
 
 // getting turbidity
 app.get("/api/taal/getreadings/turbidity", async(req, res)=>{
